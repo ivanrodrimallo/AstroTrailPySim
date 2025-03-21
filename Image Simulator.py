@@ -20,7 +20,7 @@ from scipy.ndimage import gaussian_filter
 # --------------------
 CONFIG_FILE_PATH = "Config/image_config.txt"
 
-IMAGE_SIZE_FULL = 2500
+IMAGE_SIZE_FULL = 500
 
 # Star parameters
 FLUX_MIN = 900
@@ -88,14 +88,13 @@ for i in range(n_sources):
     model = Moffat2D(amplitude=fluxes[i], x_0=x_coords[i], y_0=y_coords[i], gamma=gamma, alpha=alpha)
     # Use the precomputed grid for evaluation
     model_image = model(x_grid, y_grid)
-    data_psf += np.maximum(model_image - mu / 2, 0)
+    data_psf += np.maximum(model_image - mu / 4, 0)
 
 def transformation_function(value, a=a):
     return -10**a * np.exp(-10**(-a) * value) + 10**a
 
-#data_psf = transformation_function(data_psf)
+data_psf = transformation_function(data_psf)
 combined_image = simulated_image + data_psf
-
 
 
 
@@ -104,8 +103,8 @@ combined_image = simulated_image + data_psf
 # PART 3: Add Asteroid Trail
 # --------------------
 # Set a random integer trail length
-trail_length = 180#np.random.randint(int(IMAGE_SIZE_FULL / 4), int(IMAGE_SIZE_FULL / 3.5))
-angle = 55#np.random.uniform(0, 90)
+trail_length = np.random.randint(int(IMAGE_SIZE_FULL / 4), int(IMAGE_SIZE_FULL / 3.5))
+angle = np.random.uniform(0, 180)
 angle_rad = np.radians(angle)
 direction_vector = np.array([np.cos(angle_rad), np.sin(angle_rad)])
 center = np.array([IMAGE_SIZE_FULL / 2, IMAGE_SIZE_FULL / 2])
@@ -127,14 +126,13 @@ for i in range(trail_length):
 
 
 
-
 # --------------------
 # Error / Image Noise
 # --------------------
 # Merge the trail with the PSF image and add noise
 merged_data = combined_image + data_trail
-#merged_data = np.random.normal(loc=merged_data, scale=(1 / TRAIL_SMOOTHING) * factor * np.sqrt(merged_data))
-#merged_data = gaussian_filter(merged_data, sigma=TRAIL_SMOOTHING)
+merged_data = np.random.normal(loc=merged_data, scale=(1 / TRAIL_SMOOTHING) * factor * np.sqrt(merged_data))
+merged_data = gaussian_filter(merged_data, sigma=TRAIL_SMOOTHING)
 
 
 

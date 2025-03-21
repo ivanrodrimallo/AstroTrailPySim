@@ -103,7 +103,7 @@ def run_experiment(count):
     # Create Background Image with Stars
     # --------------------------
     simulated_image = np.full((image_size_full, image_size_full), mu)
-    
+    '''
     n_sources = int(image_size_full / 3)
     r = np.random.uniform(0, 1, n_sources)
     fluxes = FLUX_MIN * (1 - r + r * (FLUX_MAX / FLUX_MIN) ** (1 - ALPHA_STAR)) ** (1 / (1 - ALPHA_STAR))
@@ -114,14 +114,14 @@ def run_experiment(count):
     for i in range(n_sources):
         model = Moffat2D(amplitude=fluxes[i], x_0=x_coords[i], y_0=y_coords[i], gamma=gamma, alpha=alpha)
         model_image = model(grid_x, grid_y)
-        data_psf += np.maximum(model_image - mu / 2, 0)
+        data_psf += np.maximum(model_image - mu / 4, 0)
     
     def transformation_function(value, a=a):
         return -10**a * np.exp(-10**(-a) * value) + 10**a
     
     data_psf = transformation_function(data_psf)
-    
-    combined_image = simulated_image + data_psf
+    '''
+    combined_image = simulated_image# + data_psf
 
 
 
@@ -133,8 +133,8 @@ def run_experiment(count):
     # --------------------------
     trail_length = np.random.randint(int(image_size_full / 4), int(image_size_full / 3.5))
     spacing = 2.2
-    base_flux = 800
-    flux_range = 0.05 * base_flux
+    base_flux = 1400
+    flux_range = 0.1 * base_flux
     period = 0.01 * trail_length
     angle = np.random.uniform(0, 180)
     angle_rad = np.radians(angle)
@@ -155,13 +155,12 @@ def run_experiment(count):
         fluctuating_flux = base_flux + flux_range * np.sin(2 * np.pi * i / period)
         adjusted_amplitude = fluctuating_flux / temp_moffat(0, 0)
         moffat_model = Moffat2D(amplitude=adjusted_amplitude, x_0=x_coord, y_0=y_coord, gamma=gamma, alpha=alpha)
-        data_trail += moffat_model(grid_x, grid_y)
+        data_trail += np.maximum(moffat_model(grid_x, grid_y) - mu/2, 0)
+        
     
-    data_trail = data_trail - 0.5 * base_flux
-    data_trail[data_trail < 0] = 0
     merged_data = data_trail + combined_image
-    merged_data = np.random.normal(loc=merged_data, scale=(1 / smoothing) * factor * np.sqrt(merged_data))
-    merged_data = gaussian_filter(merged_data, sigma=smoothing)
+    #merged_data = np.random.normal(loc=merged_data, scale=(1 / smoothing) * factor * np.sqrt(merged_data))
+    #merged_data = gaussian_filter(merged_data, sigma=smoothing)
     
     
     
@@ -279,8 +278,8 @@ if __name__ == '__main__':
 
     
     # Save the results to .npy files
-    np.save("stdv_s_noise.npy", stdv_s)
-    np.save("stdv_e_noise.npy", stdv_e)
+    np.save("stdv_s_clean.npy", stdv_s)
+    np.save("stdv_e_clean.npy", stdv_e)
     
     # --------------------------
     # Plotting the Results

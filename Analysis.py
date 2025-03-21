@@ -29,9 +29,9 @@ def load_fits_image(file_path):
 # ---------------------------
 # File Paths and Parameters
 # ---------------------------
-fits_file_path = '../../FITS images original/J5523-1979XB.fits'
+fits_file_path = 'FITS images original/J5523-1979XB.fits'
 
-fits_file_path = 'Simulated Images/Merged_Trail_REPORT.fits'
+#fits_file_path = 'Simulated Images/Merged_Trail_REPORT.fits'
 
 config_file_path = "Config/image_config.txt"
 
@@ -153,7 +153,7 @@ if gammas and alphas and a_values and factor and mu:
 # Plot the Original FITS Image and Background Stats
 # ---------------------------
 plt.figure(figsize=(10,7))
-plt.imshow(image_data[1390:1430,1340:1380], cmap="gray", origin="lower", norm=LogNorm(vmin=600, vmax=3000))
+plt.imshow(image_data, cmap="gray", origin="lower", norm=LogNorm(vmin=600, vmax=3000))
 #plt.title(f"Original FITS File Image: {fits_file_path[27:-5]}")
 plt.colorbar(label="Pixel Value")
 plt.show()
