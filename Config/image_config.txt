@@ -1,5 +1,5 @@
-Gamma = 1.5709
-Alpha = 1.5788
-a = 3.8244
-Background factor = 1.0852
-Background mu = 937.2603
+Gamma = 1.4025
+Alpha = 1.8019
+a = 3.7770
+Background factor = 1.1301
+Background mu = 943.8336
