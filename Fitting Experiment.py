@@ -239,8 +239,8 @@ def main():
     stdv_e = list(stdv_e)
     
     # Save results to .npy files
-    np.save("stdv_s_clean.npy", stdv_s)
-    np.save("stdv_e_clean.npy", stdv_e)
+    np.save("Experiment Results/stdv_s_clean.npy", stdv_s)
+    np.save("Experiment Results/stdv_e_clean.npy", stdv_e)
     
     overall_elapsed = time.time() - overall_start_time
     minutes, seconds = divmod(overall_elapsed, 60)
@@ -279,7 +279,7 @@ def main():
     plt.legend()
     
     plt.tight_layout()
-    plt.savefig(f"histogram_stdv_distributions_{IMAGE_SIZE_FULL}x{IMAGE_SIZE_FULL}_{EXPERIMENTS}.png",
+    plt.savefig(f"Plots/histogram_stdv_distributions_{IMAGE_SIZE_FULL}x{IMAGE_SIZE_FULL}_{EXPERIMENTS}.png",
                 dpi=300, bbox_inches='tight')
     plt.show()
 
